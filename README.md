@@ -1,6 +1,6 @@
 
 ### Prepare data ###
-
+Download and pre-process the example data:
 ```
 git clone https://github.com/zhangrengang/evolution_example
 cd evolution_example
@@ -10,13 +10,36 @@ cat OrthoFinder/*fasta > pep.faa
 cat CDS/* > cds.fa
 cat wgdi/*gff > all_species_gene.gff
 ```
+Now, the directory structure like this:
+```
+$ tree
+├── all_species_gene.gff	# all GFF
+├── cds.fa			# all CDS sequences
+├── pep.faa			# all protein sequences
+├── species.design	# speceis list
+├── OrthoFinder		# input for OrthoFinder
+│   ├── Angelica_sinensis.fasta
+│   ├── Apium_graveolens.fasta
+│   ├── ......
+└── wgdi			# input for WGDI
+    ├── Angelica_sinensis-Angelica_sinensis.blast
+    ├── Angelica_sinensis-Angelica_sinensis.conf
+    ├── Angelica_sinensis-Angelica_sinensis.ctl		# for dotplot
+    ├── Angelica_sinensis.gff
+    ├── Angelica_sinensis.lens
+    ├── ......
+ ......
+```
+**Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility.
 
 ### Run OrthoFinder ###
+To infer Orthology:
 ```
 orthofinder -f OrthoFinder/ -M msa -T fasttree -t 60
 ```
 
 ### Run WGDI ###
+To detect Synteny:
 ```
 cd wgdi
 
@@ -33,11 +56,12 @@ do
 
 	# dot plot colored by Orthology Index
 	soi dotplot -s $prefix.collinearity \
-	-g ../all_species_gene.gff -c $prefix.ctl  \
-	--xlabel $SP1 --ylabel $SP2 \
-	--ks-hist --max-ks 1 -o $prefix.io    \
-	--plot-ploidy --gene-axis --number-plots \
-	--ofdir ../OrthoFinder/OrthoFinder/Results_*/ --of-color
+		-g ../all_species_gene.gff -c $prefix.ctl  \
+		--xlabel $SP1 --ylabel $SP2 \
+		--ks-hist --max-ks 1 -o $prefix.io    \
+		--plot-ploidy --gene-axis --number-plots \
+		--ofdir ../OrthoFinder/OrthoFinder/Results_*/ \
+		--of-color	# add --of-ratio 0.5 to show only orthology
 
 done
 
@@ -45,6 +69,7 @@ cd ..
 ```
 
 ### Run SOI-Phylogenomics ###
+To cluster syntenic orthogroups (SOGs) and construct phylogenomic analyses:
 ```
 cd phylogenomics
 ls ../wgdi/*.collinearity > collinearity.list
