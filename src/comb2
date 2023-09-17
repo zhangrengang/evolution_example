@@ -1,0 +1,15 @@
+#/bin/bash
+#    local n
+#    local i
+#    local j
+    TMP=($@)
+#echo $TMP
+    n=${#TMP[*]}
+    for((i=0;i<=n-2;i++))
+    do
+        for((j=i+1;j<=n-1;j++))
+        do
+            echo "${TMP[$i]} ${TMP[$j]}"
+        done
+    done
+
