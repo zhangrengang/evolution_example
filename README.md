@@ -83,8 +83,8 @@ soi cluster -s collinearity.ortho -outgroup Lonicera_japonica Ilex_polyneura Vit
 soi outgroup -s collinearity.ortho -og cluster.mcl -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera > cluster.mcl.plus
 
 # build multi-copy or single-copy gene trees
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -p 80
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -sc -concat -p 80
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.4 -p 80
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.4 -sc -concat -p 80
 
 # infer coalescent‐based species tree
 astral-pro sog.mc.cds.mm0.4.genetrees > sog.sc.cds.mm0.4.genetrees.astral
