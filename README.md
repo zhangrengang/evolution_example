@@ -77,20 +77,20 @@ ls ../wgdi/*.collinearity > collinearity.list
 # filter collinearity
 soi filter -s collinearity.list -o ../OrthoFinder/OrthoFinder/Results_* -c 0.6 > collinearity.ortho
 
-# cluster SOGs excluding outgroups
+# cluster SOGs excluding outgroups that do not share the lineage-specific WGD
 soi cluster -s collinearity.ortho -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera -prefix cluster
 # add outgroups
 soi outgroup -s collinearity.ortho -og cluster.mcl -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera > cluster.mcl.plus
 
-# build gene multi-copy or single-copy trees
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre mc-sog -concat -p 80
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sc-sog -sc -concat -p 80
+# build multi-copy or single-copy gene trees
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -p 80
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -sc -concat -p 80
 
 # infer coalescent‐based species tree
-astral-pro mc-sog.0.4.cds.genetrees > sc-sog.0.4.cds.genetrees.astral
-astral-pro sc-sog.0.4.cds.genetrees > sc-sog.0.4.cds.genetrees.astral
+astral-pro sog.mc.0.4.cds.genetrees > sog.sc.0.4.cds.genetrees.astral
+astral-pro sog.sc.0.4.cds.genetrees > sog.sc.0.4.cds.genetrees.astral
 
 # infer concatenation‐based species tree
-iqtree2 -s sc-sog.cds.mm0.4.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
+iqtree2 -s sog.sc.cds.mm0.4.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
 ```
 
