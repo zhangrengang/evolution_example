@@ -12,6 +12,7 @@ cat OrthoFinder/*fasta > pep.faa
 cat CDS/* > cds.fa
 cat wgdi/*gff > all_species_gene.gff
 ```
+If it is hard to download from GitHub, altenatively you can try to download from [BaiduYun](https://pan.baidu.com/s/1Qz-GjO0KQ1Ao2zw7vvwihg?pwd=a83p).
 Now, the directory structure like this:
 ```
 $ tree
@@ -35,13 +36,13 @@ $ tree
 **Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility (legacy from OrthoMCL).
 
 ### Run OrthoFinder ###
-To infer Orthology:
+To infer 'orthology':
 ```
 orthofinder -f OrthoFinder/ -M msa -T fasttree -t 60
 ```
 
 ### Run WGDI ###
-To detect Synteny:
+To detect 'synteny':
 ```
 cd wgdi
 
@@ -74,10 +75,10 @@ cd ..
 To cluster syntenic orthogroups (SOGs) and construct phylogenomic analyses:
 ```
 cd phylogenomics
-ls ../wgdi/*.collinearity > collinearity.list
 
 # filter collinearity
-soi filter -s collinearity.list -o ../OrthoFinder/OrthoFinder/Results_* -c 0.6 > collinearity.ortho
+ls ../wgdi/*.collinearity > collinearity.list
+soi filter -s collinearity.list -o ../OrthoFinder/OrthoFinder/Results_*/ -c 0.6 > collinearity.ortho
 
 # cluster SOGs excluding outgroups that do not share the lineage-specific WGD
 soi cluster -s collinearity.ortho -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera -prefix cluster
@@ -86,13 +87,13 @@ soi outgroup -s collinearity.ortho -og cluster.mcl -outgroup Lonicera_japonica I
 
 # build multi-copy or single-copy gene trees
 soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.4 -p 80
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.4 -sc -concat -p 80
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.2 -sc -concat -p 80
 
 # infer coalescent‐based species tree
 astral-pro sog.mc.cds.mm0.4.genetrees > sog.sc.cds.mm0.4.genetrees.astral
-astral-pro sog.sc.cds.mm0.4.genetrees > sog.sc.cds.mm0.4.genetrees.astral
+astral-pro sog.sc.cds.mm0.2.genetrees > sog.sc.cds.mm0.2.genetrees.astral
 
 # infer concatenation‐based species tree
-iqtree2 -s sog.sc.cds.mm0.4.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
+iqtree2 -s sog.sc.cds.mm0.2.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
 ```
 
