@@ -2,8 +2,10 @@
 ### Prepare data ###
 Download and pre-process the example data:
 ```
-git clone https://github.com/zhangrengang/evolution_example
+# git-lfs has been installed
+git lfs clone https://github.com/zhangrengang/evolution_example
 cd evolution_example
+
 chmod +x src/*
 find . -name "*gz" | xargs gunzip
 cat OrthoFinder/*fasta > pep.faa
@@ -30,7 +32,7 @@ $ tree
     ├── ......
  ......
 ```
-**Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility.
+**Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility (legacy from OrthoMCL).
 
 ### Run OrthoFinder ###
 To infer Orthology:
