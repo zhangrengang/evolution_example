@@ -90,8 +90,8 @@ soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_
 soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.2 -p 80 -tmp tmp.sc.0.2 -sc -concat
 
 # to infer coalescent‐based species tree
-astral-pro sog.mc.cds.mm0.4.genetrees --root Vitis_vinifera > sog.sc.cds.mm0.4.genetrees.astral
-astral-pro sog.sc.cds.mm0.2.genetrees --root Vitis_vinifera > sog.sc.cds.mm0.2.genetrees.astral
+astral-pro --root Vitis_vinifera sog.mc.cds.mm0.4.genetrees > sog.mc.cds.mm0.4.genetrees.astral
+astral-pro --root Vitis_vinifera sog.sc.cds.mm0.2.genetrees > sog.sc.cds.mm0.2.genetrees.astral
 
 # to infer concatenation‐based species tree
 iqtree2 -s sog.sc.cds.mm0.2.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
