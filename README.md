@@ -17,14 +17,14 @@ Now, the directory structure like this:
 ```
 $ tree
 ├── all_species_gene.gff	# all GFF
-├── cds.fa			# all CDS sequences
-├── pep.faa			# all protein sequences
-├── species.design	# speceis list
-├── OrthoFinder		# input for OrthoFinder
+├── cds.fa				# all CDS sequences
+├── pep.faa				# all protein sequences
+├── species.design		# speceis list
+├── OrthoFinder			# input for OrthoFinder
 │   ├── Angelica_sinensis.fasta
 │   ├── Apium_graveolens.fasta
 │   ├── ......
-└── wgdi			# input for WGDI
+└── wgdi				# input for WGDI
     ├── Angelica_sinensis-Angelica_sinensis.blast
     ├── Angelica_sinensis-Angelica_sinensis.conf
     ├── Angelica_sinensis-Angelica_sinensis.ctl		# for dotplot
@@ -64,7 +64,7 @@ do
 		--ks-hist --max-ks 1 -o $prefix.io    \
 		--plot-ploidy --gene-axis --number-plots \
 		--ofdir ../OrthoFinder/OrthoFinder/Results_*/ \
-		--of-color	# add --of-ratio 0.5 to show only orthology
+		--of-color	# add `--of-ratio 0.5` to show only orthology
 
 done
 
@@ -86,8 +86,8 @@ soi cluster -s collinearity.ortho -outgroup Lonicera_japonica Ilex_polyneura Vit
 soi outgroup -s collinearity.ortho -og cluster.mcl -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera > cluster.mcl.plus
 
 # build multi-copy or single-copy gene trees
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.4 -p 80
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.2 -sc -concat -p 80
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.4 -p 80 -tmp tmp.mc.0.4
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.2 -p 80 -tmp tmp.sc.0.2 -sc -concat
 
 # infer coalescent‐based species tree
 astral-pro sog.mc.cds.mm0.4.genetrees > sog.sc.cds.mm0.4.genetrees.astral
