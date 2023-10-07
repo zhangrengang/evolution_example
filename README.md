@@ -76,24 +76,24 @@ To cluster syntenic orthogroups (SOGs) and construct phylogenomic analyses:
 ```
 cd phylogenomics
 
-# filter collinearity
+# to filter collinearity
 ls ../wgdi/*.collinearity > collinearity.list
 soi filter -s collinearity.list -o ../OrthoFinder/OrthoFinder/Results_*/ -c 0.6 > collinearity.ortho
 
-# cluster SOGs excluding outgroups that do not share the lineage-specific WGD
+# to cluster SOGs excluding outgroups that do not share the lineage-specific WGD
 soi cluster -s collinearity.ortho -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera -prefix cluster
-# add outgroups
+# to add outgroups
 soi outgroup -s collinearity.ortho -og cluster.mcl -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera > cluster.mcl.plus
 
-# build multi-copy or single-copy gene trees
+# to build multi-copy or single-copy gene trees
 soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.4 -p 80 -tmp tmp.mc.0.4
 soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -root Vitis_vinifera -pre sog -mm 0.2 -p 80 -tmp tmp.sc.0.2 -sc -concat
 
-# infer coalescent‐based species tree
+# to infer coalescent‐based species tree
 astral-pro sog.mc.cds.mm0.4.genetrees --root Vitis_vinifera > sog.sc.cds.mm0.4.genetrees.astral
 astral-pro sog.sc.cds.mm0.2.genetrees --root Vitis_vinifera > sog.sc.cds.mm0.2.genetrees.astral
 
-# infer concatenation‐based species tree
+# to infer concatenation‐based species tree
 iqtree2 -s sog.sc.cds.mm0.2.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
 ```
 
