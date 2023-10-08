@@ -35,6 +35,10 @@ $ tree
 ```
 **Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility (legacy from OrthoMCL).
 
+### Installation ###
+If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation), 
+all the commonds used in this pipeline should have been installed.
+
 ### Run OrthoFinder ###
 To infer 'orthology':
 ```
