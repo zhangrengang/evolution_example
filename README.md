@@ -1,3 +1,10 @@
+## Table of Contents
+
+   * [Prepare data](#Prepare-data)
+   * [Installation](#Installation)
+   * [Run OrthoFinder](#Run-OrthoFinder)
+   * [Run WGDI](#Run-WGDI)
+   * [Run SOI-Phylogenomics](#Run-SOI-Phylogenomics)
 
 ### Prepare data ###
 Download and pre-process the example data:
@@ -37,7 +44,7 @@ $ tree
 
 ### Installation ###
 If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation), 
-all the commonds used in this pipeline should have been installed.
+all the commands used in this pipeline should have been installed.
 
 ### Run OrthoFinder ###
 To infer 'orthology':
