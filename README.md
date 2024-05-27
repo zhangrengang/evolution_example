@@ -41,7 +41,18 @@ $ tree
  ......
 ```
 **Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility (legacy from OrthoMCL).
+It can be easily labeled with separator `|`: 
+```
+SP=Angelica_sinensis
+# using OrthoMCL command for fasta:
+orthomclAdjustFasta $SP $SP.pep 1
+# or using sed:
+sed 's/>/>'$SP'|/' $SP.pep > $SP.fasta
 
+# using awk for gff:
+awk -v sp=$SP -v OFS="\t" '{$2=sp"|"$2;print $0}' $SP.gff0 > $SP.gff
+
+```
 ### Installation ###
 If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation), 
 all the commands used in this pipeline should have been installed.
