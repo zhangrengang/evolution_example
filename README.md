@@ -23,18 +23,18 @@ If it is hard to download from GitHub, altenatively you can try to download from
 Now, the directory structure like this:
 ```
 $ tree
-├── all_species_gene.gff    # all GFF
-├── cds.fa                # all CDS sequences
-├── pep.faa                # all protein sequences
-├── species.design        # speceis list
-├── OrthoFinder            # input for OrthoFinder
+├── all_species_gene.gff        # all GFF
+├── cds.fa                      # all CDS sequences
+├── pep.faa                     # all protein sequences
+├── species.design              # speceis list
+├── OrthoFinder                 # input for OrthoFinder
 │   ├── Angelica_sinensis.fasta
 │   ├── Apium_graveolens.fasta
 │   ├── ......
-└── wgdi                # input for WGDI
+└── wgdi                        # input for WGDI
     ├── Angelica_sinensis-Angelica_sinensis.blast
     ├── Angelica_sinensis-Angelica_sinensis.conf
-    ├── Angelica_sinensis-Angelica_sinensis.ctl        # for dotplot
+    ├── Angelica_sinensis-Angelica_sinensis.ctl   # for `soi dotplot`
     ├── Angelica_sinensis.gff
     ├── Angelica_sinensis.lens
     ├── ......
@@ -59,7 +59,7 @@ all the commands used in this pipeline should have been installed.
 ### Run OrthoFinder ###
 To infer 'orthology':
 ```
-orthofinder -f OrthoFinder/ -M msa -T fasttree -t 60
+orthofinder -f OrthoFinder/ -M msa -t 60
 ```
 
 ### Run WGDI ###
