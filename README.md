@@ -23,35 +23,34 @@ If it is hard to download from GitHub, altenatively you can try to download from
 Now, the directory structure like this:
 ```
 $ tree
-├── all_species_gene.gff	# all GFF
-├── cds.fa				# all CDS sequences
-├── pep.faa				# all protein sequences
-├── species.design		# speceis list
-├── OrthoFinder			# input for OrthoFinder
+├── all_species_gene.gff    # all GFF
+├── cds.fa                # all CDS sequences
+├── pep.faa                # all protein sequences
+├── species.design        # speceis list
+├── OrthoFinder            # input for OrthoFinder
 │   ├── Angelica_sinensis.fasta
 │   ├── Apium_graveolens.fasta
 │   ├── ......
-└── wgdi				# input for WGDI
+└── wgdi                # input for WGDI
     ├── Angelica_sinensis-Angelica_sinensis.blast
     ├── Angelica_sinensis-Angelica_sinensis.conf
-    ├── Angelica_sinensis-Angelica_sinensis.ctl		# for dotplot
+    ├── Angelica_sinensis-Angelica_sinensis.ctl        # for dotplot
     ├── Angelica_sinensis.gff
     ├── Angelica_sinensis.lens
     ├── ......
  ......
 ```
 **Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility (legacy from OrthoMCL).
-It can be easily labeled with separator `|`: 
+It can be easily labeled with separator `|` for your own data; for example: 
 ```
 SP=Angelica_sinensis
-# using OrthoMCL command for fasta:
+# using OrthoMCL command for fasta files:
 orthomclAdjustFasta $SP $SP.pep 1
 # or using sed:
 sed 's/>/>'$SP'|/' $SP.pep > $SP.fasta
 
-# using awk for gff:
+# using awk for MCscanX/WGDI gff files:
 awk -v sp=$SP -v OFS="\t" '{$2=sp"|"$2;print $0}' $SP.gff0 > $SP.gff
-
 ```
 ### Installation ###
 If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation), 
@@ -64,35 +63,81 @@ orthofinder -f OrthoFinder/ -M msa -T fasttree -t 60
 ```
 
 ### Run WGDI ###
-To detect 'synteny':
+To detect 'synteny', with visualization by `SOI` :
 ```
 cd wgdi
 
 ../src/comb2 `cat ../species.design` | while read LINE
 do
-	arr=($LINE)
-	SP1=${arr[0]}
-	SP2=${arr[1]}
-	prefix=$SP1-$SP2
-	conf=$prefix.conf
+    arr=($LINE)
+    SP1=${arr[0]}
+    SP2=${arr[1]}
+    prefix=$SP1-$SP2
+    conf=$prefix.conf
 
-	# call synteny
-	wgdi -icl $conf
+    # blast
+    diamond blastp -q ../OrthoFinder/$SP1.pep -d ../OrthoFinder/$SP2.pep -o $prefix.blast --more-sensitive -p 10 --quiet -e 0.001
 
-	# dot plot colored by Orthology Index
-	soi dotplot -s $prefix.collinearity \
-		-g ../all_species_gene.gff -c $prefix.ctl  \
-		--xlabel $SP1 --ylabel $SP2 \
-		--ks-hist --max-ks 1 -o $prefix.io    \
-		--plot-ploidy --gene-axis --number-plots \
-		--ofdir ../OrthoFinder/OrthoFinder/Results_*/ \
-		--of-color	# add `--of-ratio 0.5` to show only orthology
+    # call synteny
+    wgdi -icl $conf
+
+    # dot plot colored by Orthology Index
+    soi dotplot -s $prefix.collinearity \
+        -g ../all_species_gene.gff -c $prefix.ctl  \
+        --xlabel $SP1 --ylabel $SP2 \
+        --ks-hist --max-ks 1 -o $prefix.io    \
+        --plot-ploidy --gene-axis --number-plots \
+        --ofdir ../OrthoFinder/OrthoFinder/Results_*/ \
+        --of-color
+
+    # to show only orthology
+    soi dotplot -s $prefix.collinearity \
+        -g ../all_species_gene.gff -c $prefix.ctl  \
+        --xlabel $SP1 --ylabel $SP2 \
+        --ks-hist --max-ks 1 -o $prefix.io    \
+        --plot-ploidy --gene-axis --number-plots \
+        --ofdir ../OrthoFinder/OrthoFinder/Results_*/ \
+        --of-color --of-ratio 0.6
 
 done
 
 cd ..
 ```
 
+If you also need Ks-based visualization:
+```
+../src/comb2 `cat ../species.design` | while read LINE
+do
+    arr=($LINE)
+    SP1=${arr[0]}
+    SP2=${arr[1]}
+    prefix=$SP1-$SP2
+    conf=$prefix.conf
+
+    # calculate Ks
+    wgdi -ks $conf
+
+    # dot plot colored by Ks
+    soi dotplot -s $prefix.collinearity \
+        -g ../all_species_gene.gff -c $prefix.ctl  \
+        --kaks $prefix.collinearity.ks \
+        --xlabel $SP1 --ylabel $SP2 \
+        --ks-hist --max-ks 1.5 -o $prefix     \
+        --plot-ploidy --gene-axis --number-plots
+
+    # to show only orthology
+    soi dotplot -s $prefix.collinearity \
+        -g ../all_species_gene.gff -c $prefix.ctl  \
+        --kaks $prefix.collinearity.ks \
+        --xlabel $SP1 --ylabel $SP2 \
+        --ks-hist --max-ks 1.5 -o $prefix     \
+        --plot-ploidy --gene-axis --number-plots
+        --ofdir ../OrthoFinder/OrthoFinder/Results_*/ --of-ratio 0.6       # filtering by OI
+
+done
+
+cd ..
+```
 ### Run SOI-Phylogenomics ###
 To cluster syntenic orthogroups (SOGs) and construct phylogenomic analyses:
 ```
@@ -118,4 +163,4 @@ astral-pro --root Vitis_vinifera sog.sc.cds.mm0.2.genetrees > sog.sc.cds.mm0.2.g
 # to infer concatenation‐based species tree
 iqtree2 -s sog.sc.cds.mm0.2.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
 ```
-
+Note: although we set a unified cutoff (0.6) in the pipeline, users should manually check the resulted dot plots for confirmation, and the extremely complex cases showing unexpected patterns need to be investigated on a case-by-case basis.
