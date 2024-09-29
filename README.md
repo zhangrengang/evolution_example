@@ -57,13 +57,14 @@ If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#in
 all the commands used in this pipeline should have been installed.
 
 ### Run OrthoFinder ###
-To infer 'orthology':
+To infer 'orthology' using [OrthoFinder2](https://github.com/davidemms/OrthoFinder):
 ```
 orthofinder -f OrthoFinder/ -M msa -t 60
 ```
+`orthofinder` can by replaced by [Broccoli](https://github.com/rderelle/Broccoli), [SonicParanoid2](https://gitlab.com/salvo981/sonicparanoid2).
 
 ### Run WGDI ###
-To detect 'synteny', with visualization by `SOI` :
+To detect 'synteny' by [WGDI](https://github.com/SunPengChuan/wgdi), with visualization by `SOI` :
 ```
 cd wgdi
 
@@ -138,14 +139,16 @@ done
 
 cd ..
 ```
+`wgdi` can be replaced by [JCVI](https://github.com/tanghaibao/jcvi) and
+[MCscanX](http://chibba.pgml.uga.edu/mcscan2).
+
 ### Run SOI-Phylogenomics ###
 To cluster syntenic orthogroups (SOGs) and construct phylogenomic analyses:
 ```
 cd phylogenomics
 
 # to filter collinearity
-ls ../wgdi/*.collinearity > collinearity.list
-soi filter -s collinearity.list -o ../OrthoFinder/OrthoFinder/Results_*/ -c 0.6 > collinearity.ortho
+soi filter -s ../wgdi/*.collinearity -o ../OrthoFinder/OrthoFinder/Results_*/ -c 0.6 > collinearity.ortho
 
 # to cluster SOGs excluding outgroups that do not share the lineage-specific WGD
 soi cluster -s collinearity.ortho -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera -prefix cluster
@@ -163,4 +166,5 @@ astral-pro --root Vitis_vinifera sog.sc.cds.mm0.2.genetrees > sog.sc.cds.mm0.2.g
 # to infer concatenation‐based species tree
 iqtree2 -s sog.sc.cds.mm0.2.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
 ```
-Note: although we set a unified cutoff (0.6) in the pipeline, users should manually check the resulted dot plots for confirmation, and the extremely complex cases showing unexpected patterns need to be investigated on a case-by-case basis.
+Note: although we set a unified cutoff (0.6) in the pipeline, users should manually check the resulted dot plots for confirmation, 
+and some extremely complex cases showing unexpected patterns need to be investigated on a case-by-case basis.
