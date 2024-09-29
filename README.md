@@ -2,9 +2,9 @@
 
    * [Prepare data](#Prepare-data)
    * [Installation](#Installation)
-   * [Run OrthoFinder](#Run-OrthoFinder)
-   * [Run WGDI](#Run-WGDI)
-   * [Run SOI-Phylogenomics](#Run-SOI-Phylogenomics)
+   * [Run OrthoFinder for orthology](#Run-OrthoFinde-for-orthology)
+   * [Run WGDI for synteny](#Run-WGDI-for-synteny)
+   * [Run SOI for orthologous synteny and species tree](#Run-SOI-for-orthologous-synteny-and-species-tree)
 
 ### Prepare data ###
 Download and pre-process the example data:
@@ -56,14 +56,14 @@ awk -v sp=$SP -v OFS="\t" '{$2=sp"|"$2;print $0}' $SP.gff0 > $SP.gff
 If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation), 
 all the commands used in this pipeline should have been installed.
 
-### Run OrthoFinder ###
+### Run OrthoFinder for orthology ###
 To infer 'orthology' using [OrthoFinder2](https://github.com/davidemms/OrthoFinder):
 ```
 orthofinder -f OrthoFinder/ -M msa -t 60
 ```
 `orthofinder` can by replaced by [Broccoli](https://github.com/rderelle/Broccoli), [SonicParanoid2](https://gitlab.com/salvo981/sonicparanoid2).
 
-### Run WGDI ###
+### Run WGDI for synteny ###
 To detect 'synteny' by [WGDI](https://github.com/SunPengChuan/wgdi), with visualization by `SOI` :
 ```
 cd wgdi
@@ -142,7 +142,7 @@ cd ..
 `wgdi` can be replaced by [JCVI](https://github.com/tanghaibao/jcvi) and
 [MCscanX](http://chibba.pgml.uga.edu/mcscan2).
 
-### Run SOI-Phylogenomics ###
+### Run SOI for orthologous synteny and species tree ###
 To cluster syntenic orthogroups (SOGs) and construct phylogenomic analyses:
 ```
 cd phylogenomics
