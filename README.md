@@ -40,14 +40,16 @@ $ tree
     ├── ......
  ......
 ```
-**Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility (legacy from OrthoMCL). The CHROMosome ID should be unique (e.g. `As1`, `As2`) to avoid conflicts (legacy from MCscanX).
-It can be easily labeled with separator `|` for your own data; for example: 
+**Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for 
+uniqueness and compatibility (legacy from OrthoMCL). 
+The CHROMosome ID should also be unique (e.g. `As1`, `As2`) to avoid conflicts (legacy from MCscanX).
+The IDs can be easily labeled for your own data; for example: 
 ```
 SP=Angelica_sinensis
 # using OrthoMCL command for fasta files:
 orthomclAdjustFasta $SP $SP.pep 1
 # or using sed:
-sed 's/>/>'$SP'|/' $SP.pep > $SP.fasta
+sed 's/>/>'$SP'|/' $SP.pep > $SP.fasta  # always using the separator '|'
 
 SP2=As
 # using awk for MCscanX/WGDI gff files:
