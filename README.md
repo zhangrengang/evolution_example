@@ -40,7 +40,7 @@ $ tree
     ├── ......
  ......
 ```
-**Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility (legacy from OrthoMCL).
+**Note**: the GENE ID is needed to label with SPECIES ID (e.g. `Angelica_sinensis|AS01G00001`) for compatibility (legacy from OrthoMCL). The CHROMosome ID should be unique (e.g. `As1`, `As2`) to avoid conflicts (legacy from MCscanX).
 It can be easily labeled with separator `|` for your own data; for example: 
 ```
 SP=Angelica_sinensis
@@ -49,9 +49,11 @@ orthomclAdjustFasta $SP $SP.pep 1
 # or using sed:
 sed 's/>/>'$SP'|/' $SP.pep > $SP.fasta
 
+SP2=As
 # using awk for MCscanX/WGDI gff files:
-awk -v sp=$SP -v OFS="\t" '{$2=sp"|"$2;print $0}' $SP.gff0 > $SP.gff
+awk -v sp=$SP -v OFS="\t" '{$2=sp"|"$2;print $0}' $SP.gff0 | perl -pe 's/^\D+/'$SP2'/' > $SP.gff
 ```
+`SP` and `SP2` can be the same.
 ### Installation ###
 If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation), 
 all the commands used in this pipeline should have been installed.
@@ -109,6 +111,8 @@ cd ..
 
 If you also need Ks-based visualization:
 ```
+cd wgdi
+
 ../src/comb2 `cat ../species.design` | while read LINE
 do
     arr=($LINE)
