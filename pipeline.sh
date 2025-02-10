@@ -7,6 +7,8 @@ conda env create -f OrthoIndex.yaml
 conda activate OrthoIndex
 python3 setup.py install
 )
+git lfs clone https://github.com/zhangrengang/evolution_example
+cd evolution_example
 
 chmod +x src/*
 find . -name "*gz" | xargs gunzip
@@ -15,7 +17,7 @@ cat CDS/* > cds.fa
 cat wgdi/*gff > all_species_gene.gff
 
 # orthology
-orthofinder -f OrthoFinder/ -M msa -t 60
+orthofinder -f OrthoFinder/ -M msa -t 4
 
 # synteny
 cd wgdi
@@ -29,7 +31,7 @@ do
     conf=$prefix.conf
 
     # blast
-    diamond blastp -q ../OrthoFinder/$SP1.pep -d ../OrthoFinder/$SP2.pep -o $prefix.blast --more-sensitive -p 10 --quiet -e 0.001
+    diamond blastp -q ../OrthoFinder/$SP1.pep -d ../OrthoFinder/$SP2.pep -o $prefix.blast --more-sensitive -p 4 --quiet -e 0.001
 
     # call synteny
     wgdi -icl $conf
@@ -112,5 +114,5 @@ astral-pro --root Vitis_vinifera sog.mc.cds.mm0.4.genetrees > sog.mc.cds.mm0.4.g
 astral-hybrid --root Vitis_vinifera sog.sc.cds.mm0.2.genetrees > sog.sc.cds.mm0.2.genetrees.astral
 
 # to infer concatenation‐based species tree
-iqtree2 -s sog.sc.cds.mm0.2.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
+iqtree2 -s sog.sc.cds.mm0.2.concat.aln -T 4 -B 1000 -mset GTR -o Vitis_vinifera
 
