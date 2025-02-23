@@ -83,7 +83,7 @@ do
     conf=$prefix.conf
 
     # blast
-    diamond blastp -q ../OrthoFinder/$SP1.pep -d ../OrthoFinder/$SP2.pep -o $prefix.blast --more-sensitive -p 10 --quiet -e 0.001
+    diamond blastp -q ../OrthoFinder/$SP1.fasta -d ../OrthoFinder/$SP2.fasta -o $prefix.blast --more-sensitive -p 10 --quiet -e 0.001
 
     # call synteny
     wgdi -icl $conf
