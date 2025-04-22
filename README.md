@@ -52,10 +52,11 @@ orthomclAdjustFasta $SP $SP.pep 1
 sed 's/>/>'$SP'|/' $SP.pep > $SP.fasta  # always using the separator '|'
 
 SP2=As
-# using awk for MCscanX/WGDI gff files:
-awk -v sp=$SP -v OFS="\t" '{$2=sp"|"$2;print $0}' $SP.gff0 | perl -pe 's/^\D+/'$SP2'/' > $SP.gff
+# using awk for MCscanX/WGDI gff files or JCVI bed files:
+cat $SP.gff0 | awk -v sp=$SP -v OFS="\t" '{$2=sp"|"$2;print $0}' | perl -pe 's/^\D+/'$SP2'/' > $SP.gff
+cat $SP.bed0 | awk -v sp=$SP -v OFS="\t" '{$4=sp"|"$4;print $0}' | perl -pe 's/^\D+/'$SP2'/' > $SP.bed
 ```
-`SP` and `SP2` can be the same.
+`SP` and `SP2` can be the same. It will be convenient to use a `for/while` loop to process all the species.
 ### Installation ###
 If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation), 
 all the commands used in this pipeline should have been installed.
