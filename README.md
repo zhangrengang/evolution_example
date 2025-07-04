@@ -46,20 +46,18 @@ The CHROMosome ID should also be unique (e.g. `As1`, `As2`) to avoid conflicts (
 The IDs can be easily labeled for your own data; for example: 
 ```
 SP=Angelica_sinensis
-# using OrthoMCL command for fasta files:
-orthomclAdjustFasta $SP $SP.pep 1
-# or using sed:
+# using sed to label fasta files:
 sed 's/>/>'$SP'|/' $SP.pep > $SP.fasta  # always using the separator '|'
 
 SP2=As
-# using awk for MCscanX/WGDI gff files or JCVI bed files:
+# using awk and perl to label MCscanX/WGDI gff files or JCVI bed files:
 cat $SP.gff0 | awk -v sp=$SP -v OFS="\t" '{$2=sp"|"$2;print $0}' | perl -pe 's/^\D+/'$SP2'/' > $SP.gff
 cat $SP.bed0 | awk -v sp=$SP -v OFS="\t" '{$4=sp"|"$4;print $0}' | perl -pe 's/^\D+/'$SP2'/' > $SP.bed
 ```
 `SP` and `SP2` can be the same. It will be convenient to use a `for/while` loop to process all the species.
 ### Installation ###
-If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation), 
-all the commands used in this pipeline should have been installed.
+If you have installed [OrthoIndex](https://github.com/zhangrengang/orthoindex#installation) and activated the conda environment, 
+all the commands used in this pipeline should have been installed and can be executed in the shell.
 
 ### Run OrthoFinder for orthology ###
 To infer 'orthology' using [OrthoFinder2](https://github.com/davidemms/OrthoFinder):
@@ -166,8 +164,8 @@ soi cluster -s collinearity.ortho -outgroup Lonicera_japonica Ilex_polyneura Vit
 soi outgroup -s collinearity.ortho -og cluster.mcl -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera > cluster.mcl.plus
 
 # to build multi-copy or single-copy gene trees
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -pre sog -mm 0.4 -p 80 -tmp tmp.mc.0.4
-soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -pre sog -mm 0.2 -p 80 -tmp tmp.sc.0.2 -sc -concat -trimal_opts " -gappyout" -iqtree_opts " -B 1000"
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -pre sog -fast -mm 0.4 -p 80 -tmp tmp.mc.0.4
+soi phylo -og cluster.mcl.plus -pep ../pep.faa -cds ../cds.fa -both -pre sog -fast -mm 0.2 -p 80 -tmp tmp.sc.0.2 -sc -concat -trimal_opts " -gappyout" -iqtree_opts " -B 1000"
 
 # to infer coalescent‐based species tree
 astral-pro --root Vitis_vinifera sog.mc.cds.mm0.4.genetrees > sog.mc.cds.mm0.4.genetrees.astral
@@ -178,3 +176,8 @@ iqtree2 -s sog.sc.cds.mm0.2.concat.aln -T 60 -B 1000 -mset GTR -o Vitis_vinifera
 ```
 Note: although we set a unified cutoff (0.6) in the pipeline, users should manually check the resulted dot plots for confirmation, 
 and some extremely complex cases showing unexpected patterns need to be investigated on a case-by-case basis.
+
+If all species share the WGD(s), `-outgroup` should not be used, and just run `soi cluster` and skip `soi outgroup`:
+```
+soi cluster -s collinearity.ortho -prefix cluster
+```
