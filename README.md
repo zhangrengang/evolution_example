@@ -77,7 +77,7 @@ indir=.
 outdir=wgdi
 sdesign=species.design
 
-# lens and gff files for `wgdi`
+# to generate lens and gff files for `wgdi`, and ctl files for `soi dotplot`
 soi-syn to_wgdi indir=$indir outdir=$outdir species=$sdesign gff=all_species_gene.gff chrLst=chr.list
 # blast files for `wgdi`
 soi-orth to_wgdi $indir/OrthoFinder/OrthoFinder/Results_* $sdesign outdir=$outdir
@@ -93,8 +93,8 @@ do
 	ctl=$SP1-$SP2.ctl
 	# conf file for `wgdi`
 	sh ../src/wgdi-conf.sh $SP1 $SP2 > $conf
-	# ctl file for `soi dotplot`
-	soi-ctl by_genes $chrl $SP1 $SP2 > $ctl
+#	# ctl file for `soi dotplot`
+#	soi-ctl by_genes $chrl $SP1 $SP2 > $ctl
 done
 cd -
 ```
