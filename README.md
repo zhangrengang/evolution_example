@@ -25,6 +25,7 @@ Now, the directory structure like this:
 $ tree
 ├── all_species_gene.gff        # all GFF
 ├── cds.fa                      # all CDS sequences
+├── chr.list					$ all chromosome information
 ├── pep.faa                     # all protein sequences
 ├── species.design              # speceis list
 ├── OrthoFinder                 # input for OrthoFinder
@@ -77,7 +78,7 @@ outdir=wgdi
 sdesign=species.design
 
 # lens and gff files for `wgdi`
-soi-syn to_wgdi indir=$indir outdir=$outdir species=$sdesign
+soi-syn to_wgdi indir=$indir outdir=$outdir species=$sdesign gff=all_species_gene.gff chrLst=chr.list
 # blast files for `wgdi`
 soi-orth to_wgdi $indir/OrthoFinder/OrthoFinder/Results_* $sdesign outdir=$outdir
 
