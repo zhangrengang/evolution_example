@@ -182,7 +182,7 @@ cd ..
 ### Run SOI for orthologous synteny and species tree ###
 To cluster syntenic orthogroups (SOGs) and construct phylogenomic analyses:
 ```
-cd phylogenomics
+mkdir -p phylogenomics && cd phylogenomics
 
 # to filter collinearity
 soi filter -s ../wgdi/*.collinearity -o ../OrthoFinder/OrthoFinder/Results_*/ -c 0.6 > collinearity.ortho
