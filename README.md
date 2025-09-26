@@ -186,7 +186,7 @@ To cluster syntenic orthogroups (SOGs) and construct phylogenomic analyses:
 mkdir -p phylogenomics && cd phylogenomics
 
 # to filter collinearity
-soi filter -s ../wgdi/*.collinearity -o ../OrthoFinder/OrthoFinder/Results_*/ -c 0.6 > collinearity.ortho
+soi filter -s ../wgdi/*.collinearity -o ../OrthoFinder/OrthoFinder/Results_*/ -c 0.6 -stat collinearity.ortho.stats > collinearity.ortho
 
 # to cluster SOGs excluding outgroups that do not share the lineage-specific WGD
 soi cluster -s collinearity.ortho -outgroup Lonicera_japonica Ilex_polyneura Vitis_vinifera -prefix cluster
