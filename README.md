@@ -211,3 +211,13 @@ If all species share the WGD(s), `-outgroup` should not be used, and just run `s
 ```
 soi cluster -s collinearity.ortho -prefix cluster
 ```
+
+When syntenic signals are not conserved or difficult to detect, gene trees can be constructed based on ortholog results from OrthoFinder using the following commands:
+
+### Basic Gene Tree Construction
+```
+soi phylo -og ../OrthoFinder/OrthoFinder/Results_* -fmt orthofinder -pep ../pep.faa -cds ../cds.fa \
+        -both -pre mc-sog-of -tmp mc-sog-of.tmp -p 80 -fast
+soi phylo -og ../OrthoFinder/OrthoFinder/Results_* -fmt orthofinder  -pep ../pep.faa -cds ../cds.fa \
+        -both -pre sc-sog-of -tmp sc-sog-of.tmp -p 80 -fast -sc -concat -mm 0.2 -trimal_opts " -gappyout" -iqtree_opts " -B 1000"
+```
