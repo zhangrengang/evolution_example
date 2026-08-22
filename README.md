@@ -94,7 +94,7 @@ do
 	# *.conf file for `wgdi`
 	sh ../src/wgdi-conf.sh $SP1 $SP2 > $conf
 #	# ctl file for `soi dotplot`
-#	soi-ctl by_genes $chrl $SP1 $SP2 > $ctl
+	soi-ctl by_genes $chrl $SP1 $SP2 > $ctl
 done
 cd -
 ```
